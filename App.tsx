@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import Form from '/components/Form'
-import MemoryCard from '/components/MemoryCard'
+
+import React, { useState } from 'react'
+import Form from './components/Form'
+import MemoryCard from './components/MemoryCard'
 
 export default function App() {
     const [isGameOn, setIsGameOn] = useState(false)

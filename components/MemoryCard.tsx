@@ -1,5 +1,6 @@
+import React from 'react'
 export default function MemoryCard({ handleClick }) {
-    const emojiArray = ['🐶', '🐷', '🐙', '🐛', '🐵', '🐶', '🐷', '🐙', '🐛', '🐵']
+    const emojiArray: string[] = ['🐶', '🐷', '🐙', '🐛', '🐵', '🐶', '🐷', '🐙', '🐛', '🐵']
     
     const emojiEl = emojiArray.map((emoji, index) =>
         <li key={index} className="card-item">

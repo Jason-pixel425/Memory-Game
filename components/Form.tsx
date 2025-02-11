@@ -1,3 +1,4 @@
+import React from 'react'
 import RegularButton from './RegularButton'
 
 export default function Form({ handleSubmit }) {
