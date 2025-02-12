@@ -4,7 +4,7 @@ import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
 
 export default function App() {
-    const [isGameOn, setIsGameOn] = useState(false)
+    const [isGameOn, setIsGameOn] = useState<boolean>(false)
     
     function startGame(e) {
         e.preventDefault()
