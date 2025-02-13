@@ -25,9 +25,8 @@ export default function App() {
            
            const data: EmojisData[] = await response.json()
 
-           // Get first five emoji data from api.
-           const dataSample: EmojisData[] = getDataSlice(data)
-           setEmojisData(dataSample)
+           // Get random five emoji data from api.
+           setEmojisData(getDataSlice(data))
            setIsGameOn(true)
         } catch (e: unknown){
             console.error("You got the error: ", e)
@@ -53,7 +52,7 @@ export default function App() {
     // function to get five random elements from an Array and return them in a new array.
     // Uses getRandomIndices
     function getDataSlice (dataArr: EmojisData[]): EmojisData[] {
-        const randomIndicesArr = getRandomIndices(dataArr)
+        const randomIndicesArr: number[] = getRandomIndices(dataArr)
         const randomDataArr: EmojisData[] = randomIndicesArr.map(index => dataArr[index])
         return randomDataArr
     }
