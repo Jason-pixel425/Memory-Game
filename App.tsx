@@ -36,7 +36,7 @@ export default function App() {
         }
     }
 
-    // Function to get five random elements from an Array and return them in a new array
+    // Function to get five random indices from an Array and return them in a new array
     function getRandomIndices <EmojisData>(dataArr: EmojisData[]): number[] {
         const randomIndicesArray: number[] = []
         for (let i = 0; i < 5; i++) {
@@ -50,26 +50,13 @@ export default function App() {
         return randomIndicesArray
     }
 
+    // function to get five random elements from an Array and return them in a new array.
+    // Uses getRandomIndices
     function getDataSlice (dataArr: EmojisData[]): EmojisData[] {
         const randomIndicesArr = getRandomIndices(dataArr)
-        console.log(randomIndicesArr)
-        const randomDataArr: EmojisData[] = []
-        for (const number of randomIndicesArr) {
-            randomDataArr.push(dataArr[Number(number)])
-        }
+        const randomDataArr: EmojisData[] = randomIndicesArr.map(index => dataArr[index])
         return randomDataArr
     }
-
-    /**
-     * Challenge:
-     * 1) Below the "startGame" function, create a new function called "getDataSlice". The function should reveice "data" as a parameter.
-     * 2) Inside this function, make a call to "getRandomIndicies" and store the return value in a variable called "randomIndices".
-     * 3) Map over "randomIndices" and use the random numbers stored in this array to create a new array of random emojis selected from "data". 
-     * Store this new array in a variable called "dataSlice" and return it at the bottom of the function.
-     * 4) Inside the try block of the "startGame" function, make a call to "getDataSlice", passing "data" as an argument. Save the return value in a variable called "dataSlice".
-     * 5) Delete the "dataSample" variable and replace "dataSample" with the new "dataSlice" variable in the "setEmojisData" function.
-     * 6) Run the code and start a new game to check that your code is working.
-    */  
 
     // Testing emojis data. ** REMOVE BEFORE PUBLISH **
     useEffect(() => {
