@@ -26,7 +26,7 @@ export default function App() {
            const data: EmojisData[] = await response.json()
 
            // Get first five emoji data from api.
-           const dataSample: EmojisData[] = data.slice(0, 5);
+           const dataSample: EmojisData[] = getRandomIndeces(data)
 
            setEmojisData(dataSample)
            setIsGameOn(true)
@@ -36,6 +36,28 @@ export default function App() {
             setIsLoading(false)
         }
     }
+
+    // Function to get five ranom elements from an Array and return them in a new array
+    // ** Current TypeScripted to just for the emojisData **
+    function getRandomIndeces (emojiData: EmojisData[]): EmojisData[] {
+        const randomIndicesArray: EmojisData[] = []
+
+        for (let i = 0; i < 5; i++) {
+            randomIndicesArray.push(emojiData[Math.floor(Math.random() * emojiData.length)])
+        }
+
+        return randomIndicesArray
+    }
+
+        /**
+     * Challenge:
+     * 1) Create a new function, "getRandomIndices", right below the "startGame" function. It should receive "data" as a parameter.
+     * 2) In this new function, declare a new variable, "randomIndicesArray", and initialize it as an empty array.
+     * 3) After declaring "randomIndicesArray", use a for loop to generate 5 random numbers within a range equivalent to the length of the "data" array and push these numbers to "randomIndicesArray". Return "randomIndicesArray" at the bottom of the function.
+     * 4) In the try block of the "startGame" function, log the return value from "getRandomIndices" to the console, passing "data" to it as an argument.
+     * 
+     *💡 Hint: We want exactly 5 unique random numbers. What can you do inside the for loop to ensure that we'll get that?
+    */
 
     // Testing emojis data. ** REMOVE BEFORE PUBLISH **
     useEffect(() => {
