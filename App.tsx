@@ -1,9 +1,7 @@
-
 import React, { useState, useEffect } from 'react'
 import { EmojisData } from './components/emojisData.ts'
 import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
-
 
 
 export default function App() {
@@ -26,7 +24,10 @@ export default function App() {
            const data: EmojisData[] = await response.json()
 
            // Get random five emoji data from api.
-           setEmojisData(getDataSlice(data))
+           const dataSlice = getDataSlice(data)
+           const emojisArr = getEmojisArr(dataSlice)
+           console.log(emojisArr)
+           setEmojisData(emojisArr)
            setIsGameOn(true)
         } catch (e: unknown){
             console.error("You got the error: ", e)
@@ -56,6 +57,17 @@ export default function App() {
         const randomDataArr: EmojisData[] = randomIndicesArr.map(index => dataArr[index])
         return randomDataArr
     }
+
+// Duplicates Items in array and shuffles them with Fisher-Yates algorithm before returning array
+    function getEmojisArr(data: EmojisData[]): EmojisData[] {
+        const pairedEmojisArr: EmojisData[] = [...data, ...data]
+        for (let i = pairedEmojisArr.length - 1; i > 0; i--) { 
+            const j = Math.floor(Math.random() * (i + 1)); 
+            [pairedEmojisArr[i], pairedEmojisArr[j]] = [pairedEmojisArr[j], pairedEmojisArr[i]]; 
+          } 
+        return pairedEmojisArr
+    }
+
 
     // Testing emojis data. ** REMOVE BEFORE PUBLISH **
     useEffect(() => {
