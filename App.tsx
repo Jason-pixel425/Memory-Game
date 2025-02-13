@@ -1,21 +1,16 @@
 
 import React, { useState, useEffect } from 'react'
+import { EmojisData } from './components/emojisData.ts'
 import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
 
-interface Data {
-    name: string
-    category: string
-    group: string
-    htmlCode: Array<string>
-    unicode: Array<string>
-}
+
 
 export default function App() {
     // staet to track if game has started
     const [isGameOn, setIsGameOn] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [emojisData, setEmojisData] = useState<Data[]>([])
+    const [emojisData, setEmojisData] = useState<EmojisData[]>([])
 
 
      async function startGame(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
@@ -28,10 +23,10 @@ export default function App() {
             throw new Error("Could not fetch data from API")
            }
            
-           const data: Data[] = await response.json()
+           const data: EmojisData[] = await response.json()
 
            // Get first five emoji data from api.
-           const dataSample: Data[] = data.slice(0, 5);
+           const dataSample: EmojisData[] = data.slice(0, 5);
 
            setEmojisData(dataSample)
            setIsGameOn(true)
@@ -56,7 +51,7 @@ export default function App() {
         <main>
             <h1>Memory</h1>
             {!isGameOn && <Form isLoading={isLoading} handleSubmit={startGame} />}
-            {isGameOn && <MemoryCard handleClick={turnCard} />}
+            {isGameOn && <MemoryCard emojisData={emojisData} handleClick={turnCard} />}
         </main>
     )
 }
