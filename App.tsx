@@ -26,8 +26,7 @@ export default function App() {
            const data: EmojisData[] = await response.json()
 
            // Get first five emoji data from api.
-           const dataSample: EmojisData[] = getRandomIndeces(data)
-
+           const dataSample: EmojisData[] = getRandomIndices(data)
            setEmojisData(dataSample)
            setIsGameOn(true)
         } catch (e: unknown){
@@ -37,16 +36,20 @@ export default function App() {
         }
     }
 
-    // Function to get five ranom elements from an Array and return them in a new array
-    // ** Current TypeScripted to just for the emojisData **
-    function getRandomIndeces (emojiData: EmojisData[]): EmojisData[] {
-        const randomIndicesArray: EmojisData[] = []
-
+    // Function to get five random elements from an Array and return them in a new array
+    function getRandomIndices <Type>(dataArr: Type[]): Type[] {
+        const randomIndicesArray: number[] = []
+        const randomElementArray: Type[] = []
         for (let i = 0; i < 5; i++) {
-            randomIndicesArray.push(emojiData[Math.floor(Math.random() * emojiData.length)])
+            const randomIndex = Math.floor(Math.random() * dataArr.length)
+            if (!randomIndicesArray.includes(randomIndex)){
+                randomIndicesArray.push(randomIndex)
+                randomElementArray.push(dataArr[randomIndex])
+            } else {
+                i--
+            }
         }
-
-        return randomIndicesArray
+        return randomElementArray
     }
 
         /**
