@@ -26,7 +26,7 @@ export default function App() {
            const data: EmojisData[] = await response.json()
 
            // Get first five emoji data from api.
-           const dataSample: EmojisData[] = getRandomIndices(data)
+           const dataSample: EmojisData[] = getDataSlice(data)
            setEmojisData(dataSample)
            setIsGameOn(true)
         } catch (e: unknown){
@@ -37,30 +37,39 @@ export default function App() {
     }
 
     // Function to get five random elements from an Array and return them in a new array
-    function getRandomIndices <Type>(dataArr: Type[]): Type[] {
+    function getRandomIndices <EmojisData>(dataArr: EmojisData[]): number[] {
         const randomIndicesArray: number[] = []
-        const randomElementArray: Type[] = []
         for (let i = 0; i < 5; i++) {
             const randomIndex = Math.floor(Math.random() * dataArr.length)
             if (!randomIndicesArray.includes(randomIndex)){
                 randomIndicesArray.push(randomIndex)
-                randomElementArray.push(dataArr[randomIndex])
             } else {
                 i--
             }
         }
-        return randomElementArray
+        return randomIndicesArray
     }
 
-        /**
+    function getDataSlice (dataArr: EmojisData[]): EmojisData[] {
+        const randomIndicesArr = getRandomIndices(dataArr)
+        console.log(randomIndicesArr)
+        const randomDataArr: EmojisData[] = []
+        for (const number of randomIndicesArr) {
+            randomDataArr.push(dataArr[Number(number)])
+        }
+        return randomDataArr
+    }
+
+    /**
      * Challenge:
-     * 1) Create a new function, "getRandomIndices", right below the "startGame" function. It should receive "data" as a parameter.
-     * 2) In this new function, declare a new variable, "randomIndicesArray", and initialize it as an empty array.
-     * 3) After declaring "randomIndicesArray", use a for loop to generate 5 random numbers within a range equivalent to the length of the "data" array and push these numbers to "randomIndicesArray". Return "randomIndicesArray" at the bottom of the function.
-     * 4) In the try block of the "startGame" function, log the return value from "getRandomIndices" to the console, passing "data" to it as an argument.
-     * 
-     *💡 Hint: We want exactly 5 unique random numbers. What can you do inside the for loop to ensure that we'll get that?
-    */
+     * 1) Below the "startGame" function, create a new function called "getDataSlice". The function should reveice "data" as a parameter.
+     * 2) Inside this function, make a call to "getRandomIndicies" and store the return value in a variable called "randomIndices".
+     * 3) Map over "randomIndices" and use the random numbers stored in this array to create a new array of random emojis selected from "data". 
+     * Store this new array in a variable called "dataSlice" and return it at the bottom of the function.
+     * 4) Inside the try block of the "startGame" function, make a call to "getDataSlice", passing "data" as an argument. Save the return value in a variable called "dataSlice".
+     * 5) Delete the "dataSample" variable and replace "dataSample" with the new "dataSlice" variable in the "setEmojisData" function.
+     * 6) Run the code and start a new game to check that your code is working.
+    */  
 
     // Testing emojis data. ** REMOVE BEFORE PUBLISH **
     useEffect(() => {
