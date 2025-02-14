@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { EmojisData } from './components/emojisData.ts'
+import { EmojisData, SelectedCards } from './components/emojisData.ts'
 import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
 
@@ -9,6 +9,7 @@ export default function App() {
     const [isGameOn, setIsGameOn] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [emojisData, setEmojisData] = useState<EmojisData[]>([])
+    const [selectedCards, setSelectedCards] = useState<SelectedCards[]>([])
 
 
      async function startGame(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
@@ -72,11 +73,14 @@ export default function App() {
     // Testing emojis data. ** REMOVE BEFORE PUBLISH **
     useEffect(() => {
         console.log(emojisData)
-    }, [emojisData])
+        console.log(selectedCards)
+    }, [selectedCards])
     
     // Function to turn a card over (currently just logging to console on click)
     function turnCard(emojiName: string, index: number) {
         console.log("Memory card clicked", emojiName, "  ", index)
+        setSelectedCards(prevSelectedCards => [...prevSelectedCards, {name: emojiName, index: index}])
+        
     }
     
     return (
