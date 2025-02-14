@@ -3,7 +3,7 @@ import { decodeEntity } from 'html-entities'
 import { EmojisData } from './emojisData.ts'
 
 interface Props {
-    handleClick: () => void
+    handleClick: (emojiName:string, index: number) => void
     emojisData: EmojisData[]
 }
 
@@ -17,7 +17,7 @@ export default function MemoryCard({ handleClick, emojisData }: Props) {
         <li key={index} className="card-item">
             <button
                 className="btn btn--emoji"
-                onClick={handleClick}
+                onClick={(e) => handleClick(emoji.name, index)}
             >
                 {decodeEntity(emoji.htmlCode[0])}
             </button>

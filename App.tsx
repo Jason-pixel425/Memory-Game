@@ -75,8 +75,8 @@ export default function App() {
     }, [emojisData])
     
     // Function to turn a card over (currently just logging to console on click)
-    function turnCard() {
-        console.log("Memory card clicked")
+    function turnCard(emojiName: string, index: number) {
+        console.log("Memory card clicked", emojiName, "  ", index)
     }
     
     return (
