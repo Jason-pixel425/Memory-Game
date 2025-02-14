@@ -38,7 +38,7 @@ export default function App() {
             setIsLoading(false)
         }
     }
-    a
+    
     // Testing emojis data. ** REMOVE BEFORE PUBLISH **
     useEffect(() => {
         if (selectedCards.length === 2 && selectedCards[0]?.name === selectedCards[1]?.name){
