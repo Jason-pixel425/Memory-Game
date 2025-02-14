@@ -10,8 +10,10 @@ export default function App() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [emojisData, setEmojisData] = useState<EmojisData[]>([])
     const [selectedCards, setSelectedCards] = useState<SelectedCards[]>([])
+    const [matchedCards, setMatchedCards] = useState<SelectedCards[]>([])
+    
 
-
+    
      async function startGame(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
         e.preventDefault()
         setIsLoading(true)
@@ -36,6 +38,15 @@ export default function App() {
             setIsLoading(false)
         }
     }
+    a
+    // Testing emojis data. ** REMOVE BEFORE PUBLISH **
+    useEffect(() => {
+        if (selectedCards.length === 2 && selectedCards[0]?.name === selectedCards[1]?.name){
+            setMatchedCards(prevMatchedCards => [...prevMatchedCards, ...selectedCards])
+        }
+        console.log(matchedCards)
+        // setMatchedCards()
+    }, [selectedCards])
 
     // Function to get five random indices from an Array and return them in a new array
     function getRandomIndices <EmojisData>(dataArr: EmojisData[]): number[] {
@@ -69,17 +80,21 @@ export default function App() {
         return pairedEmojisArr
     }
 
-
-    // Testing emojis data. ** REMOVE BEFORE PUBLISH **
-    useEffect(() => {
-        console.log(emojisData)
-        console.log(selectedCards)
-    }, [selectedCards])
     
     // Function to turn a card over (currently just logging to console on click)
     function turnCard(emojiName: string, index: number) {
-        console.log("Memory card clicked", emojiName, "  ", index)
-        setSelectedCards(prevSelectedCards => [...prevSelectedCards, {name: emojiName, index: index}])
+        // console.log("Memory card clicked", emojiName, "  ", index)
+        const cardCheck = selectedCards.find(card => card.index === index)
+        if (selectedCards.length === 2) {
+            setSelectedCards([])
+        }
+        if (!cardCheck && selectedCards.length < 2){
+            setSelectedCards(prevSelectedCards => [...prevSelectedCards, {name: emojiName, index: index}])
+        }
+        // If there are two cards in the array, and they match, mark them as matched 
+        // If there are two cards in the array, set array to empty array
+        // else, add card to array.
+        
         
     }
     
