@@ -12,7 +12,14 @@ export default function App() {
     const [selectedCards, setSelectedCards] = useState<SelectedCards[]>([])
     const [matchedCards, setMatchedCards] = useState<SelectedCards[]>([])
     
+    // Derived value for isGameOver
+    // Before game start, boolean is false (length === 0) otherwise remains false unless data and matched cards length is true
+    const isGameOver: boolean = emojisData.length === 0 ? false : matchedCards.length === emojisData.length ? true : false
 
+    // Debuggin console.logs
+    console.log("is game over", isGameOver)
+    console.log("matched cards", matchedCards)
+    console.log("selectedCards", selectedCards)
     
      async function startGame(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
         e.preventDefault()
@@ -44,7 +51,6 @@ export default function App() {
         if (selectedCards.length === 2 && selectedCards[0]?.name === selectedCards[1]?.name){
             setMatchedCards(prevMatchedCards => [...prevMatchedCards, ...selectedCards])
         }
-        console.log(matchedCards)
         // setMatchedCards()
     }, [selectedCards])
 
@@ -85,11 +91,12 @@ export default function App() {
     function turnCard(emojiName: string, index: number) {
         // console.log("Memory card clicked", emojiName, "  ", index)
         const cardCheck = selectedCards.find(card => card.index === index)
-        if (selectedCards.length === 2) {
-            setSelectedCards([])
-        }
+
         if (!cardCheck && selectedCards.length < 2){
             setSelectedCards(prevSelectedCards => [...prevSelectedCards, {name: emojiName, index: index}])
+        }
+        if (selectedCards.length === 2) {
+            setSelectedCards([{name: emojiName, index: index}])
         }
         // If there are two cards in the array, and they match, mark them as matched 
         // If there are two cards in the array, set array to empty array
