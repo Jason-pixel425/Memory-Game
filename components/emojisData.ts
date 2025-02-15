@@ -6,3 +6,8 @@ export interface EmojisData {
     htmlCode: Array<string>
     unicode: Array<string>
 }
+
+export interface SelectedCards {
+    name: string
+    index: number
+}
