@@ -17,17 +17,18 @@ export default function MemoryCard({ handleClick, selectedCards, matchedCards, e
     
     // Array of button elements that will act as the cards to match
     const cardEl = emojisData.map((emoji: EmojisData, index: number) => {
-        const selectedCardEntry: boolean = selectedCards.some(card => card.name === emoji.name)
-        const matchedCardEntry: boolean = matchedCards.some(card => card.name === emoji.name)
+        const selectedCardEntry: boolean = selectedCards.some(card => card.index === index)
+        const matchedCardEntry: boolean = matchedCards.some(card => card.index === index)
        return ( <li key={index} className="card-item">
             <EmojiButton
                 className="btn btn--emoji"
                 handleClick={handleClick}
                 emojiName={emoji.name}
                 index={index}
-            >
-                {decodeEntity(emoji.htmlCode[0])}
-            </EmojiButton>
+                content={decodeEntity(emoji.htmlCode[0])}
+                selectedCardEntry={selectedCardEntry}
+                matchedCardEntry={matchedCardEntry}
+            />
         </li>
         )
         }

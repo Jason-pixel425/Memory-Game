@@ -5,16 +5,21 @@ interface Props {
     className: string
     emojiName: string
     index: number
-    children: string
+    content: string
+    selectedCardEntry: boolean
+    matchedCardEntry: boolean
 }
 
-export default function EmojiButton({handleClick, className, emojiName, index, children }: Props) {
+export default function EmojiButton({handleClick, className, content, emojiName, index, selectedCardEntry, matchedCardEntry }: Props) {
+    const disabled: boolean = selectedCardEntry || matchedCardEntry ? true : false
     return (
         <button
             className={className}
             onClick={(e) => handleClick(emojiName, index)}
+            disabled={disabled}
+            
         >
-            {children}
+            {selectedCardEntry || matchedCardEntry ? content : "?"}
         </button>
     )
 }
