@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { EmojisData, SelectedCards } from './components/emojisData.ts'
 import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
+import AssistiveTechInfo from './components/AssistiveTechInfo.tsx'
 
 
 export default function App() {
@@ -109,6 +110,7 @@ export default function App() {
         <main>
             <h1>Memory</h1>
             {!isGameOn && <Form isLoading={isLoading} handleSubmit={startGame} />}
+            {isGameOn && !isGameOver && <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} /> }
             {isGameOn && <MemoryCard selectedCards={selectedCards} 
                 matchedCards={matchedCards} 
                 emojisData={emojisData} 
