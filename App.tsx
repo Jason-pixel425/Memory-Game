@@ -3,7 +3,7 @@ import { EmojisData, SelectedCards } from './components/emojisData.ts'
 import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
 import AssistiveTechInfo from './components/AssistiveTechInfo.tsx'
-
+import GameOver from './components/GameOver.tsx'
 
 export default function App() {
     // staet to track if game has started
@@ -37,7 +37,6 @@ export default function App() {
            // Get random five emoji data from api.
            const dataSlice = getDataSlice(data)
            const emojisArr = getEmojisArr(dataSlice)
-           console.log(emojisArr)
            setEmojisData(emojisArr)
            setIsGameOn(true)
         } catch (e: unknown){
@@ -47,7 +46,7 @@ export default function App() {
         }
     }
     
-    // Testing emojis data. ** REMOVE BEFORE PUBLISH **
+    // Matched card checking from selectedCards state. If matching name property, set in matchedCards (spreding prev values)
     useEffect(() => {
         if (selectedCards.length === 2 && selectedCards[0]?.name === selectedCards[1]?.name){
             setMatchedCards(prevMatchedCards => [...prevMatchedCards, ...selectedCards])
@@ -91,7 +90,7 @@ export default function App() {
     // Function to turn a card over (currently just logging to console on click)
     function turnCard(emojiName: string, index: number) {
         // console.log("Memory card clicked", emojiName, "  ", index)
-        const cardCheck = selectedCards.find(card => card.index === index)
+        const cardCheck: SelectedCards | undefined = selectedCards.find(card => card.index === index)
 
         if (!cardCheck && selectedCards.length < 2){
             setSelectedCards(prevSelectedCards => [...prevSelectedCards, {name: emojiName, index: index}])
@@ -111,6 +110,7 @@ export default function App() {
             <h1>Memory</h1>
             {!isGameOn && <Form isLoading={isLoading} handleSubmit={startGame} />}
             {isGameOn && !isGameOver && <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} /> }
+            {isGameOver && <GameOver />}
             {isGameOn && <MemoryCard selectedCards={selectedCards} 
                 matchedCards={matchedCards} 
                 emojisData={emojisData} 
