@@ -1,9 +1,9 @@
 import React from 'react'
 
 interface Props {
-    children: React.ReactNode
-    handleClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>
-    isLoading: boolean 
+    children?: React.ReactNode
+    handleClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void> | void
+    isLoading?: boolean 
 }
 
 export default function RegularButton({ children, isLoading, handleClick }: Props) {
@@ -12,7 +12,7 @@ export default function RegularButton({ children, isLoading, handleClick }: Prop
         <button
             className="btn btn--text"
             onClick={handleClick}
-            disabled={isLoading}
+            disabled={isLoading || false}
         >
             {children}
         </button>

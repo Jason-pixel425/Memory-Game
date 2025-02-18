@@ -102,7 +102,13 @@ export default function App() {
         // If there are two cards in the array, set array to empty array
         // else, add card to array.
         
-        
+    }
+
+    // Function to start a new Game | Passed to GameOver component
+    function resetGame() {
+        setIsGameOn(false)
+        setSelectedCards([])
+        setMatchedCards([])
     }
     
     return (
@@ -110,7 +116,7 @@ export default function App() {
             <h1>Memory</h1>
             {!isGameOn && <Form isLoading={isLoading} handleSubmit={startGame} />}
             {isGameOn && !isGameOver && <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} /> }
-            {isGameOver && <GameOver />}
+            {isGameOver && <GameOver resetGame={resetGame} />}
             {isGameOn && <MemoryCard selectedCards={selectedCards} 
                 matchedCards={matchedCards} 
                 emojisData={emojisData} 
