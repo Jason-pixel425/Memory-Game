@@ -4,6 +4,7 @@ import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
 import AssistiveTechInfo from './components/AssistiveTechInfo.tsx'
 import GameOver from './components/GameOver.tsx'
+import ErrorCard from './components/ErrorCard.tsx'
 
 export default function App() {
     // staet to track if game has started
@@ -12,6 +13,9 @@ export default function App() {
     const [emojisData, setEmojisData] = useState<EmojisData[]>([])
     const [selectedCards, setSelectedCards] = useState<SelectedCards[]>([])
     const [matchedCards, setMatchedCards] = useState<SelectedCards[]>([])
+    const [isError, setIsError] = useState<boolean>(false)
+
+
     
     // Derived value for isGameOver
     // Before game start, boolean is false (length === 0) otherwise remains false unless data and matched cards length is true
@@ -41,6 +45,7 @@ export default function App() {
            setIsGameOn(true)
         } catch (e: unknown){
             console.error("You got the error: ", e)
+            setIsError(true)
         } finally {
             setIsLoading(false)
         }
@@ -105,17 +110,20 @@ export default function App() {
     }
 
     // Function to start a new Game | Passed to GameOver component
-    function resetGame() {
+    function resetGame(): void {
         setIsGameOn(false)
         setSelectedCards([])
         setMatchedCards([])
+        setIsError(false)
     }
     
+
     return (
         <main>
             <h1>Memory</h1>
-            {!isGameOn && <Form isLoading={isLoading} handleSubmit={startGame} />}
+            {!isGameOn && !isError && <Form isLoading={isLoading} handleSubmit={startGame} />}
             {isGameOn && !isGameOver && <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} /> }
+            {isError && <ErrorCard handleClick={resetGame} />}
             {isGameOver && <GameOver resetGame={resetGame} />}
             {isGameOn && <MemoryCard selectedCards={selectedCards} 
                 matchedCards={matchedCards} 
