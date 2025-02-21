@@ -30,7 +30,7 @@ export default function App() {
         e.preventDefault()
         setIsLoading(true)
         try{
-           const response: Response = await fetch("https://emojihub.yurace.pro/api/all/category/animals-and-nature")
+           const response: Response = await fetch("https://emojihub.yurace.pro/api/all/category/animalss-and-nature")
            
            if (!response.ok) {
             throw new Error("Could not fetch data from API")

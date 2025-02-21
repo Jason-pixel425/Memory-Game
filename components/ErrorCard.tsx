@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import RegularButton from './RegularButton.tsx'
 
 interface Props {
@@ -7,8 +7,14 @@ interface Props {
 
 
 export default function ErrorCard({handleClick}: Props) {
+    const divRef = useRef<HTMLDivElement | null>(null)
+
+    useEffect(() => {
+        divRef?.current?.focus()
+    }, [])
+
     return (
-        <div className="wrapper wrapper--accent">
+        <div ref={divRef} className="wrapper wrapper--accent">
             <p className="p--large">Sorry, there was an error.</p>
             <p className="p--regular">Please come back later or click the button below to try restarting the game.</p>
             <RegularButton handleClick={handleClick}>Restart Game</RegularButton>
