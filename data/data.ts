@@ -1,4 +1,20 @@
-const data = {
+
+interface Category {
+    name: string
+    value: string
+}
+
+interface Number {
+    value: string
+}
+
+interface Data {
+    category: Category[]
+    number: Number[]
+}
+
+
+const data: Data = {
     category: [
         {
             name: "Animals and nature",
@@ -40,4 +56,4 @@ const data = {
     ]
 }
 
-export { data }
+export { data, Category, Number, Data }

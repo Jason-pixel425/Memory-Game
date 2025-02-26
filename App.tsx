@@ -2,16 +2,33 @@ import React, { useState, useEffect } from 'react'
 import { EmojisData, SelectedCards } from './components/emojisData.ts'
 import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
+import AssistiveTechInfo from './components/AssistiveTechInfo.tsx'
+import GameOver from './components/GameOver.tsx'
+import ErrorCard from './components/ErrorCard.tsx'
 
+interface formData {
+    category: string
+    number: number
+}
 
 export default function App() {
-    // staet to track if game has started
-    const [isGameOn, setIsGameOn] = useState<boolean>(false)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [emojisData, setEmojisData] = useState<EmojisData[]>([])
-    const [selectedCards, setSelectedCards] = useState<SelectedCards[]>([])
-    const [matchedCards, setMatchedCards] = useState<SelectedCards[]>([])
     
+    const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
+    const [formData, setFormData] = useState<formData>({category : "animals-and-nature", number: 10})
+    // state to track if game has started
+    const [isGameOn, setIsGameOn] = useState<boolean>(false)
+    // State to prevent multiple concurent fetch calls
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    // Hold data slice of returned fetch
+    const [emojisData, setEmojisData] = useState<EmojisData[]>([])
+    // Tracks the one, two or zero selected cards by user
+    const [selectedCards, setSelectedCards] = useState<SelectedCards[]>([])
+    // Keeps track of all cards the user has matched
+    const [matchedCards, setMatchedCards] = useState<SelectedCards[]>([])
+    // Used to check if there is an error in the fetch request
+    const [isError, setIsError] = useState<boolean>(false)
+
+
     // Derived value for isGameOver
     // Before game start, boolean is false (length === 0) otherwise remains false unless data and matched cards length is true
     const isGameOver: boolean = emojisData.length === 0 ? false : matchedCards.length === emojisData.length ? true : false
@@ -25,7 +42,7 @@ export default function App() {
         e.preventDefault()
         setIsLoading(true)
         try{
-           const response: Response = await fetch("https://emojihub.yurace.pro/api/all/category/animals-and-nature")
+           const response: Response = await fetch(`https://emojihub.yurace.pro/api/all/category/${formData.category}`)
            
            if (!response.ok) {
             throw new Error("Could not fetch data from API")
@@ -36,17 +53,18 @@ export default function App() {
            // Get random five emoji data from api.
            const dataSlice = getDataSlice(data)
            const emojisArr = getEmojisArr(dataSlice)
-           console.log(emojisArr)
            setEmojisData(emojisArr)
            setIsGameOn(true)
         } catch (e: unknown){
             console.error("You got the error: ", e)
+            setIsError(true)
         } finally {
             setIsLoading(false)
+            setIsFirstRender(false)
         }
     }
     
-    // Testing emojis data. ** REMOVE BEFORE PUBLISH **
+    // Matched card checking from selectedCards state. If matching name property, set in matchedCards (spreding prev values)
     useEffect(() => {
         if (selectedCards.length === 2 && selectedCards[0]?.name === selectedCards[1]?.name){
             setMatchedCards(prevMatchedCards => [...prevMatchedCards, ...selectedCards])
@@ -57,7 +75,7 @@ export default function App() {
     // Function to get five random indices from an Array and return them in a new array
     function getRandomIndices <EmojisData>(dataArr: EmojisData[]): number[] {
         const randomIndicesArray: number[] = []
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < formData.number; i++) {
             const randomIndex = Math.floor(Math.random() * dataArr.length)
             if (!randomIndicesArray.includes(randomIndex)){
                 randomIndicesArray.push(randomIndex)
@@ -90,7 +108,7 @@ export default function App() {
     // Function to turn a card over (currently just logging to console on click)
     function turnCard(emojiName: string, index: number) {
         // console.log("Memory card clicked", emojiName, "  ", index)
-        const cardCheck = selectedCards.find(card => card.index === index)
+        const cardCheck: SelectedCards | undefined = selectedCards.find(card => card.index === index)
 
         if (!cardCheck && selectedCards.length < 2){
             setSelectedCards(prevSelectedCards => [...prevSelectedCards, {name: emojiName, index: index}])
@@ -102,13 +120,32 @@ export default function App() {
         // If there are two cards in the array, set array to empty array
         // else, add card to array.
         
-        
+    }
+
+    // Function to start a new Game | Passed to GameOver component
+    function resetGame(): void {
+        setIsGameOn(false)
+        setSelectedCards([])
+        setMatchedCards([])
+        setIsError(false)
     }
     
+    function handleFormChange(e: React.ChangeEvent<HTMLSelectElement>): void {
+        setFormData(prevFormData => {
+            return ({
+                ...prevFormData,
+               [e.target.name]: e.target.value
+            })
+        })
+    }
+
     return (
         <main>
             <h1>Memory</h1>
-            {!isGameOn && <Form isLoading={isLoading} handleSubmit={startGame} />}
+            {!isGameOn && !isError && <Form isLoading={isLoading} handleChange={handleFormChange} firstRender={isFirstRender} handleSubmit={startGame} />}
+            {isGameOn && !isGameOver && <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} /> }
+            {isError && <ErrorCard handleClick={resetGame} />}
+            {isGameOver && <GameOver resetGame={resetGame} />}
             {isGameOn && <MemoryCard selectedCards={selectedCards} 
                 matchedCards={matchedCards} 
                 emojisData={emojisData} 
