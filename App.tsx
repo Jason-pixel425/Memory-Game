@@ -13,7 +13,7 @@ interface formData {
 
 export default function App() {
     
-
+    const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
     const [formData, setFormData] = useState<formData>({category : "animals-and-nature", number: 10})
     // state to track if game has started
     const [isGameOn, setIsGameOn] = useState<boolean>(false)
@@ -60,6 +60,7 @@ export default function App() {
             setIsError(true)
         } finally {
             setIsLoading(false)
+            setIsFirstRender(false)
         }
     }
     
@@ -129,14 +130,19 @@ export default function App() {
         setIsError(false)
     }
     
-    function handleFormChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        console.log(e.target.value)
+    function handleFormChange(e: React.ChangeEvent<HTMLSelectElement>): void {
+        setFormData(prevFormData => {
+            return ({
+                ...prevFormData,
+               [e.target.name]: e.target.value
+            })
+        })
     }
 
     return (
         <main>
             <h1>Memory</h1>
-            {!isGameOn && !isError && <Form isLoading={isLoading} handleChange={handleFormChange} handleSubmit={startGame} />}
+            {!isGameOn && !isError && <Form isLoading={isLoading} handleChange={handleFormChange} firstRender={isFirstRender} handleSubmit={startGame} />}
             {isGameOn && !isGameOver && <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} /> }
             {isError && <ErrorCard handleClick={resetGame} />}
             {isGameOver && <GameOver resetGame={resetGame} />}
